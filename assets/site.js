@@ -10,16 +10,19 @@
     live.setAttribute('role', 'status');
     d.body.appendChild(live);
     var say = function (m) { live.textContent = ''; setTimeout(function () { live.textContent = m; }, 50); };
-    var done = function (btn, ok, source) {
-      if (!ok) { // no clipboard: select the text instead
-        if (source) { var r = d.createRange(); r.selectNodeContents(source); getSelection().removeAllRanges(); getSelection().addRange(r); }
-        return say('선택했습니다. 직접 복사해 주세요.');
-      }
-      say('복사했습니다');
+    var flash = function (btn, text) { // the visible half of the feedback; the status region is the spoken half
       var label = btn.textContent;
       btn.setAttribute('data-done', '');
-      btn.textContent = '복사했습니다';
+      btn.textContent = text;
       setTimeout(function () { btn.textContent = label; btn.removeAttribute('data-done'); }, 1600);
+    };
+    var done = function (btn, ok, source) {
+      if (ok) { say('복사했습니다'); return flash(btn, '복사했습니다'); }
+      if (!source) { say('복사하지 못했습니다'); return flash(btn, '복사하지 못했습니다'); }
+      var r = d.createRange(); r.selectNodeContents(source); // no clipboard: select the text instead
+      getSelection().removeAllRanges(); getSelection().addRange(r);
+      say('선택했습니다. 직접 복사해 주세요.');
+      flash(btn, '선택했습니다');
     };
     each(buttons, function (btn) {
       btn.hidden = false;

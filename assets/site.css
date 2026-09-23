@@ -1,5 +1,6 @@
 /* Assembly Stats Data — the one stylesheet for every page. Handoff notes: ds-preview/README.md
-   Type (size/line px): 13/20 14/22 15/22 16/28 18/30 20/28 24/32 28/36 · weights 400 600 700
+   Type (size/line, px at the default 16px root; written in rem so the reader's font-size setting scales it):
+   13/20 14/22 15/22 16/28 18/30 20/28 24/32 28/36 · weights 400 600 700
    Space (px): 4 8 12 16 24 32 40 56 80 · 1px lines · radius 4px · no shadows, gradients, fills */
 
 /* 1. Tokens ---------------------------------------------------------- */
@@ -8,21 +9,22 @@
   --paper: #FAFAF8; --surface: #FFFFFF; --ink: #1C1C1A; --ink-2: #5F5E5A;
   --ink-3: #8A8984; /* non-text only */
   --line: #E4E4E0; --line-strong: #CFCEC8;
-  --accent: #2E6B5E; --accent-weak: #E9F0ED; /* focus, underline, selection, :target. Never a fill */
+  --accent: #2E6B5E; --accent-weak: #E9F0ED; /* focus, underline, :target. Never a fill */
+  --selection: #BFD7CE; /* ::selection only: ink on it 11.2:1, 1.45:1 against paper */
   --caution: #9A3412; /* real warnings only: text and 2px rules */
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   --gutter: 20px; --rail: 184px; --gap: 64px; --measure: 680px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C;
-    --line: #2C2C29; --line-strong: #3A3A36; --accent: #9CC4B8; --accent-weak: #1A2B27; --caution: #FDBA74;
+    --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C; --line: #2C2C29; --line-strong: #3A3A36;
+    --accent: #9CC4B8; --accent-weak: #1A2B27; --selection: #2C4A42; --caution: #FDBA74;
   }
 }
-:root[data-theme="dark"] {
+:root[data-theme="dark"] { /* test hook only: there is no theme toggle (diagnosis S-04, §7.2) */
   color-scheme: dark;
-  --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C;
-  --line: #2C2C29; --line-strong: #3A3A36; --accent: #9CC4B8; --accent-weak: #1A2B27; --caution: #FDBA74;
+  --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C; --line: #2C2C29; --line-strong: #3A3A36;
+  --accent: #9CC4B8; --accent-weak: #1A2B27; --selection: #2C4A42; --caution: #FDBA74;
 }
 :root[data-theme="light"] { color-scheme: light; }
 @media (min-width: 600px) { :root { --gutter: 32px; } }
@@ -31,17 +33,17 @@
 *, ::before, ::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; }
 body {
-  margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/28px var(--font);
+  margin: 0; background: var(--paper); color: var(--ink); font: 400 1rem/1.75rem var(--font);
   -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3, p, ol, ul, dl, dd, figure, pre, table { margin: 0; padding: 0; }
 h1, h2, h3 { text-wrap: balance; }
 p, li, dd, td, th, caption { text-wrap: pretty; }
 strong { font-weight: 600; }
-time, .tnum { font-variant-numeric: tabular-nums; }
-.nobr { white-space: nowrap; } /* short compounds only, e.g. 일별·7일간 */
+time { font-variant-numeric: tabular-nums; white-space: nowrap; } /* "2026년 9월 | 13일" never splits */
+.nobr { white-space: nowrap; } /* noun + counter pairs and short compounds: 팔로워 수, 일별·7일간 */
 [hidden] { display: none !important; }
-::selection { background: var(--accent-weak); color: var(--ink); }
+::selection { background: var(--selection); color: var(--ink); }
 
 a {
   color: var(--ink); text-decoration-line: underline; text-decoration-thickness: 1px;
@@ -51,6 +53,7 @@ a:hover { text-decoration-thickness: 2px; }
 a[href^="mailto:"] { overflow-wrap: anywhere; } /* and put <wbr> before the @ */
 .wordmark, .tabs a, .toc a, .more-link, .button, .doc-link-title, .skip-link { text-decoration-line: none; }
 .toc a:hover, .more-link:hover { text-decoration-line: underline; }
+.arrow { display: inline-block; flex: none; width: .92em; height: .67em; vertical-align: -.025em; fill: currentColor; } /* Pretendard's → as SVG: saves a 26KB font chunk */
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 a:focus-visible { border-radius: 2px; }
@@ -63,13 +66,14 @@ a:focus-visible { border-radius: 2px; }
 }
 
 /* 3. Type roles (one place per size) ---------------------------------- */
-.label, .toc-label, .steps-group, .note-label, .doc-meta dt, .spec dt, .fields dt, .table caption,
-.table thead th, .email-template figcaption, .table--stack td[data-label]::before {
-  font-weight: 600; font-size: 13px; line-height: 20px; color: var(--ink-2);
+.toc-label, .note-label, .doc-meta dt, .spec dt, .fields dt, .table thead th,
+.email-template figcaption, .table--stack td[data-label]::before { /* column and field labels */
+  font-weight: 600; font-size: .8125rem; line-height: 1.25rem; color: var(--ink-2);
 }
-.doc-meta, .spec dd, .fields dd, .table, .toc a, .email-template pre { font-size: 14px; line-height: 22px; }
+.table caption, .steps-group { font-weight: 600; font-size: .875rem; line-height: 1.375rem; color: var(--ink); } /* group titles: one step above labels */
+.doc-meta, .spec dd, .fields dd, .table, .toc a, .email-template pre { font-size: .875rem; line-height: 1.375rem; }
 .doc-meta, .spec, .table, .steps { font-variant-numeric: tabular-nums; }
-.tabs a, .button, .more-link, .skip-link { font-weight: 600; font-size: 15px; line-height: 22px; }
+.tabs a, .button, .more-link, .skip-link { font-weight: 600; font-size: .9375rem; line-height: 1.375rem; }
 
 /* 4. Layout: one column; from 1024px a 184 rail + 64 gap + 680 grid ---- */
 .frame { max-width: calc(var(--measure) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
@@ -87,11 +91,21 @@ a:focus-visible { border-radius: 2px; }
   position: absolute; z-index: 1; left: var(--gutter); top: 8px; display: inline-flex; align-items: center;
   min-height: 44px; padding: 0 16px; border-radius: 4px; background: var(--ink); color: var(--paper);
 }
+@media (min-width: 1024px) { /* line up with the 928px grid; 100% is the viewport minus its scrollbar */
+  .skip-link { left: max(var(--gutter), calc((100% - (var(--rail) + var(--gap) + var(--measure))) / 2)); }
+}
 .site-header { border-bottom: 1px solid var(--line); }
 .site-header .frame { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 24px; }
-.wordmark { display: flex; align-items: baseline; gap: 6px; padding-block: 14px; white-space: nowrap; }
-.wordmark-name { font-weight: 700; font-size: 16px; line-height: 20px; letter-spacing: -.02em; }
-.wordmark-sub { font-weight: 600; font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.wordmark { /* 14 + 20 + 14 = 48px row; 8px inline padding keeps the inset focus ring off the letters */
+  display: flex; align-items: baseline; gap: 6px; justify-self: start;
+  margin-inline: -8px; padding: 14px 8px; white-space: nowrap;
+}
+.wordmark:focus-visible { outline-offset: -2px; }
+.wordmark-mark { align-self: center; flex: none; width: 20px; height: 20px; margin-right: 2px; }
+.wordmark-mark rect { fill: var(--ink); }
+.wordmark-mark path { fill: var(--paper); }
+.wordmark-name { font-weight: 700; font-size: 1rem; line-height: 1.25rem; letter-spacing: -.02em; }
+.wordmark-sub { font-weight: 600; font-size: .8125rem; line-height: 1rem; color: var(--ink-2); } /* 16px line: the baselined pair stays 20px tall */
 .tabs ul { display: flex; list-style: none; }
 .tabs a { position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 12px; color: var(--ink-2); }
 .tabs a:hover, .tabs a[aria-current="page"] { color: var(--ink); }
@@ -112,39 +126,51 @@ a:focus-visible { border-radius: 2px; }
   .site-header .frame { display: grid; column-gap: var(--gap); }
   .tabs ul { margin: 0 0 0 -12px; } /* first tab label lines up with the text column */
 }
+@media (forced-colors: active) {
+  .wordmark-mark { forced-color-adjust: none; }
+  .wordmark-mark rect { fill: CanvasText; }
+  .wordmark-mark path { fill: Canvas; }
+}
 
 /* 6. Document head ------------------------------------------------------ */
 .doc { padding-top: 24px; }
-h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02em; }
-.h1-product { display: block; margin-bottom: 4px; font-weight: 600; font-size: 14px; line-height: 20px; letter-spacing: 0; color: var(--ink-2); }
-.lede { margin-top: 12px; font-size: 18px; line-height: 30px; color: var(--ink-2); }
+h1 { font-weight: 700; font-size: 1.5rem; line-height: 2rem; letter-spacing: -.02em; }
+.h1-product { display: block; margin-bottom: 4px; font-weight: 600; font-size: .875rem; line-height: 1.25rem; letter-spacing: 0; color: var(--ink-2); }
+.lede { margin-top: 12px; font-size: 1.125rem; line-height: 1.875rem; color: var(--ink-2); }
 .doc-meta { margin-top: 24px; padding-block: 12px; border-block: 1px solid var(--line); }
 .doc-meta > div { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 12px; align-items: baseline; }
 .doc-meta > div + div { margin-top: 4px; }
+.doc-meta .copy { margin-block: -5px; } /* 32px button inside a 22px line: no baseline slip, no taller strip */
+@media (max-width: 767px), (pointer: coarse) {
+  .doc-meta .copy { display: none; } /* phones: the mailto opens the mail app and long-press copies; the request block keeps its copy buttons */
+}
 @media (min-width: 768px) {
   .doc { padding-top: 40px; }
-  h1 { font-size: 28px; line-height: 36px; }
+  h1 { font-size: 1.75rem; line-height: 2.25rem; }
   .doc-meta { display: flex; flex-wrap: wrap; gap: 8px 40px; }
   .doc-meta > div { display: block; }
   .doc-meta > div + div { margin-top: 0; }
 }
 
-/* 7. Table of contents: numbered rows; sticky rail from 1024px -------- */
+/* 7. Table of contents: numbered list; sticky rail from 1024px -------- */
 .toc { margin-top: 32px; }
 @media (max-width: 1023px) { .toc--rail-only { display: none; } } /* short pages: rail only */
 .doc-lead { margin-top: 24px; } /* optional slot between .doc-head and .toc, e.g. the deletion request block */
 .toc-label { margin-bottom: 8px; }
-.toc ol { list-style: none; counter-reset: toc; border-top: 1px solid var(--line); }
-.toc li { counter-increment: toc; border-bottom: 1px solid var(--line); }
+.toc ol { list-style: none; counter-reset: toc; border-block: 1px solid var(--line); } /* no row rules: navigation must not look like the data rows below */
+.toc li { counter-increment: toc; }
 .toc a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding-block: 8px; }
 .toc a::before { content: counter(toc); content: counter(toc) / ""; min-width: 16px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+@media (min-width: 600px) and (max-width: 1023px) {
+  .toc ol { columns: 2; column-gap: 32px; }
+  .toc li { break-inside: avoid; }
+}
 @media (min-width: 1024px) {
   .toc { grid-column: 1; grid-row: 1 / span 3; align-self: start; position: sticky; top: 40px; margin-top: 0; }
   .toc ol { border: 0; border-left: 1px solid var(--line); }
-  .toc li { border: 0; }
   .toc a {
     align-items: baseline; gap: 8px; min-height: 0; margin-left: -1px; padding: 4px 0 4px 12px;
-    border-left: 2px solid transparent; font-size: 13px; line-height: 20px; color: var(--ink-2);
+    border-left: 2px solid transparent; font-size: .8125rem; line-height: 1.25rem; color: var(--ink-2);
   }
   .toc a:hover, .toc a[aria-current="true"] { color: var(--ink); }
   .toc a[aria-current="true"] { border-left-color: var(--ink); }
@@ -155,12 +181,12 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 .doc-body > * + :not(.doc-section) { margin-top: 40px; }
 .doc-section { scroll-margin-top: 24px; }
 .doc-section + .doc-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
-.doc-section h2 { font-weight: 700; font-size: 20px; line-height: 28px; letter-spacing: -.01em; }
-.doc-section h3 { font-weight: 700; font-size: 16px; line-height: 28px; }
+.doc-section h2 { font-weight: 700; font-size: 1.25rem; line-height: 1.75rem; letter-spacing: -.01em; }
+.doc-section h3 { font-weight: 700; font-size: 1rem; line-height: 1.75rem; }
 .doc-section:not(.doc-section--plain) { counter-increment: sec; }
 .doc-section:not(.doc-section--plain) > h2::before {
   content: counter(sec); content: counter(sec) / ""; display: inline-block; min-width: 24px;
-  font-weight: 600; font-size: 16px; letter-spacing: 0; color: var(--ink-2); font-variant-numeric: tabular-nums;
+  font-weight: 600; font-size: 1rem; line-height: 1.25rem; letter-spacing: 0; color: var(--ink-2); font-variant-numeric: tabular-nums;
 }
 .doc-section:target > h2 { margin-inline: -8px; padding-inline: 8px; border-radius: 2px; background: var(--accent-weak); }
 @media (min-width: 768px) { .doc-section + .doc-section { margin-top: 56px; } }
@@ -172,7 +198,15 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 .doc-section > h2 + * { margin-top: 12px; }
 .doc-section > * + :is(h3, .note, .spec, .table, .steps-group, .request, .email-template, .actions, .doc-links),
 .doc-section > :is(.note, .spec, .table, .steps, .request, .email-template, .actions, .doc-links) + * { margin-top: 24px; }
-.doc-section > .steps-group + .steps, .doc-section > .email-template + .actions { margin-top: 12px; }
+.doc-section > :is(h3, .steps-group) + *, .doc-section > .email-template + .actions { margin-top: 12px; } /* (0,2,0), later: beats the 24px rule */
+/* One rule between blocks: a ruled list that ends a section (or precedes the hub meta) drops its closing rule,
+   because the next section's top rule closes it */
+.doc-section:not(:last-child) > .spec:last-child > div:last-child,
+.doc-section:not(:last-child) > .steps:last-child > li:last-child,
+.doc-section:not(:last-child) > .doc-links:last-child > li:last-child,
+.doc-section:not(:last-child) > .table:last-child > tbody > tr:last-child,
+.doc-section:not(:last-child) > .table:last-child > tbody > tr:last-child > *,
+.doc-links:has(+ .doc-meta) > li:last-child { border-bottom: 0; }
 .prose-list { padding-left: 20px; }
 .prose-list > li + li { margin-top: 4px; }
 .prose-list > li::marker { color: var(--ink-3); }
@@ -198,7 +232,12 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 .table :is(th, td):last-child { padding-right: 0; }
 .table thead th { padding-block: 8px; border-bottom-color: var(--line-strong); }
 .table tbody th { font-weight: 600; }
-.history tbody th { width: 128px; white-space: nowrap; font-weight: 400; font-size: 13px; color: var(--ink-2); }
+.history tbody th { width: 128px; white-space: nowrap; font-weight: 400; font-size: .8125rem; color: var(--ink-2); }
+@media (min-width: 600px) { /* deliberate columns: 128 label | flexible | 224 value */
+  .table--stack { table-layout: fixed; }
+  .table--stack thead th:first-child { width: 128px; }
+  .table--stack thead th:last-child { width: 224px; }
+}
 @media (max-width: 599px) { /* .table--stack (3+ columns): rows become blocks, td[data-label] names its column */
   .table--stack, .table--stack :is(caption, tbody, tr, th, td) { display: block; }
   .table--stack thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -213,11 +252,11 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 /* 10. Steps: two groups, 1px circle numbers -------------------------------- */
 .steps { list-style: none; counter-reset: step; border-top: 1px solid var(--line); }
 .steps[start="3"] { counter-reset: step 2; } /* add a rule like this for any other start value */
-.steps > li { position: relative; counter-increment: step; padding: 16px 0 16px 36px; border-bottom: 1px solid var(--line); }
+.steps > li { position: relative; counter-increment: step; padding: 16px 0 16px calc(1.5rem + 12px); border-bottom: 1px solid var(--line); }
 .steps > li::before { /* non-empty ::before also keeps list semantics in Safari */
-  content: counter(step); position: absolute; left: 0; top: 18px; width: 24px; height: 24px;
+  content: counter(step); position: absolute; left: 0; top: calc(16px + .125rem); width: 1.5rem; height: 1.5rem;
   border: 1px solid var(--line-strong); border-radius: 50%;
-  font-weight: 600; font-size: 13px; line-height: 22px; text-align: center; color: var(--ink-2);
+  font-weight: 600; font-size: .8125rem; line-height: 1.375rem; text-align: center; color: var(--ink-2);
 }
 .steps .prose-list { margin-top: 8px; }
 
@@ -232,9 +271,9 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
   .request { padding: 24px; }
   .fields > div { grid-template-columns: 112px minmax(0, 1fr); }
 }
-.token {
-  padding: 2px 6px; border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600;
-  overflow-wrap: anywhere; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+.token { /* same 32px box as the .copy button beside it */
+  display: inline-flex; align-items: center; min-height: 32px; padding: 0 6px;
+  border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600; overflow-wrap: anywhere;
 }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .button {
@@ -249,7 +288,7 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 .copy {
   position: relative; display: inline-flex; align-items: center; min-height: 32px; margin-left: 8px; padding: 0 8px;
   border: 1px solid var(--ink-3); border-radius: 4px; background: transparent; color: var(--ink-2);
-  font: 600 13px/20px var(--font); cursor: pointer;
+  font: 600 .8125rem/1.25rem var(--font); cursor: pointer;
 }
 .copy::after { content: ""; position: absolute; inset: -6px 0; } /* 44px touch target */
 .copy:hover, .copy[data-done] { border-color: var(--ink); color: var(--ink); }
@@ -262,40 +301,53 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
 .email-template pre { padding: 16px; font-family: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .email-template .key { color: var(--ink-2); }
 
-/* 13. Document list (index hub) ---------------------------------------------- */
+/* 13. Document list (index hub, 404) ------------------------------------------ */
 .doc-links { list-style: none; border-top: 1px solid var(--line); }
 .doc-links li {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: center;
   min-height: 64px; padding-block: 16px; border-bottom: 1px solid var(--line);
 }
+.doc-links li::before { content: "\200B"; position: absolute; } /* keeps list semantics in Safari (list-style: none) */
 .doc-link-title { font-weight: 600; }
 .doc-link-title::after { content: ""; position: absolute; inset: 0; } /* whole row is the target */
-.doc-link-desc, .doc-link-date { font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.doc-link-desc, .doc-link-date { font-size: .8125rem; line-height: 1.25rem; color: var(--ink-2); }
 .doc-link-date { margin-top: 4px; }
 .doc-link-arrow { color: var(--ink-2); }
 .doc-links li:hover .doc-link-title { text-decoration-line: underline; text-decoration-thickness: 2px; }
 .doc-links li:hover .doc-link-arrow { color: var(--ink); }
-.doc-links li:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.doc-links li:has(:focus-visible)::after { /* ring 8px outside the text, inside the row's hairlines */
+  content: ""; position: absolute; inset: 4px -8px; outline: 2px solid var(--accent); border-radius: 2px; pointer-events: none;
+}
 .doc-links li:has(:focus-visible) :focus-visible { outline: none; }
 
 /* 14. Footer ---------------------------------------------------------------- */
-.site-footer { margin-top: 80px; padding: 24px 0 40px; border-top: 1px solid var(--line); font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.site-footer { margin-top: 80px; padding: 24px 0 40px; border-top: 1px solid var(--line); font-size: .8125rem; line-height: 1.25rem; color: var(--ink-2); }
 .site-footer ul { display: flex; flex-wrap: wrap; list-style: none; }
 .site-footer li + li::before { content: "·"; content: "·" / ""; margin-inline: 8px; color: var(--ink-3); }
 .site-footer a { display: inline-block; padding-block: 2px; color: var(--ink-2); }
 .site-footer .footer-privacy { font-weight: 700; color: var(--ink); }
 .footer-name { margin-bottom: 8px; font-weight: 600; color: var(--ink); }
 .footer-body > * + * { margin-top: 4px; }
+@media (max-width: 599px), (pointer: coarse) { /* 44px touch targets */
+  .site-footer ul { align-items: center; }
+  .site-footer a { display: inline-flex; align-items: center; min-height: 44px; padding-block: 0; }
+  .footer-body > * + * { margin-top: 0; }
+}
 
 /* 15. Print (A4) --------------------------------------------------------------- */
 @media print {
   @page { margin: 18mm 16mm; }
-  :root { --paper: #fff; --ink: #000; --ink-2: #444; --ink-3: #888; --line: #ccc; --line-strong: #999; --accent: #000; --accent-weak: #fff; --caution: #9A3412; }
+  /* every selector the dark tokens use, so print wins at equal specificity (it comes later) */
+  :root, :root:not([data-theme="light"]), :root[data-theme] {
+    color-scheme: light;
+    --paper: #fff; --surface: #fff; --ink: #000; --ink-2: #444; --ink-3: #888; --line: #ccc; --line-strong: #999;
+    --accent: #000; --accent-weak: #fff; --selection: #ddd; --caution: #9A3412;
+  }
   body { font-size: 10.5pt; line-height: 1.6; }
-  .skip-link, .tabs, .toc, .copy, .actions, .doc-link-arrow, .site-footer nav, .to-top { display: none !important; }
+  .skip-link, .tabs, .toc, .copy, .actions, .doc-link-arrow, .wordmark-mark, .site-footer nav, .to-top { display: none !important; }
   .frame { display: block; max-width: none; padding: 0; }
   .site-header, .doc-meta { border: 0; }
-  .wordmark { padding: 0 0 8pt; }
+  .wordmark { margin: 0; padding: 0 0 8pt; }
   .doc { padding-top: 0; }
   h1 { font-size: 18pt; line-height: 1.3; }
   .lede { font-size: 11.5pt; line-height: 1.6; }
@@ -304,10 +356,14 @@ h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02e
   .doc-section h2 { font-size: 13pt; line-height: 1.4; }
   .doc-section h2::before { width: auto !important; margin: 0 !important; text-align: left !important; }
   .doc-body, .doc-section + .doc-section { margin-top: 16pt; }
-  h2, h3, .label, .steps-group, .note-label, caption { break-after: avoid; }
+  h2, h3, .steps-group, .note-label, caption { break-after: avoid; }
   p, li { orphans: 3; widows: 3; }
   p:has(+ :is(ul, ol, table)) { break-after: avoid; }
   tr, .spec > div, .fields > div, .steps > li, .note, .email-template { break-inside: avoid; }
-  .doc a[href]:not([href^="#"]):not([href^="mailto:"])::after { content: " (" attr(href) ")"; position: static; font-size: 9pt; font-weight: 400; color: var(--ink-2); }
+  /* link destinations that work on paper: absolute URLs as written, site paths made absolute */
+  .doc a[href]:not([href^="#"], [href^="mailto:"])::after { content: " (" attr(href) ")"; position: static; outline: 0; font-size: 9pt; font-weight: 400; color: var(--ink-2); }
+  .doc a[href]:not([href^="#"], [href^="mailto:"], [href^="http"], [href^="/"])::after { content: " (https://holyh2o.github.io/assembly-stats-data-policy/" attr(href) ")"; }
+  .doc a[href^="/"]:not([href^="//"])::after { content: " (https://holyh2o.github.io" attr(href) ")"; }
+  .doc a[href="./"]:not([href^="#"])::after { content: " (https://holyh2o.github.io/assembly-stats-data-policy/)"; }
   .site-footer { margin-top: 24pt; padding: 8pt 0 0; }
 }
