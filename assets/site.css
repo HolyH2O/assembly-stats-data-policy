@@ -1,0 +1,313 @@
+/* Assembly Stats Data — the one stylesheet for every page. Handoff notes: ds-preview/README.md
+   Type (size/line px): 13/20 14/22 15/22 16/28 18/30 20/28 24/32 28/36 · weights 400 600 700
+   Space (px): 4 8 12 16 24 32 40 56 80 · 1px lines · radius 4px · no shadows, gradients, fills */
+
+/* 1. Tokens ---------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+  --paper: #FAFAF8; --surface: #FFFFFF; --ink: #1C1C1A; --ink-2: #5F5E5A;
+  --ink-3: #8A8984; /* non-text only */
+  --line: #E4E4E0; --line-strong: #CFCEC8;
+  --accent: #2E6B5E; --accent-weak: #E9F0ED; /* focus, underline, selection, :target. Never a fill */
+  --caution: #9A3412; /* real warnings only: text and 2px rules */
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --gutter: 20px; --rail: 184px; --gap: 64px; --measure: 680px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C;
+    --line: #2C2C29; --line-strong: #3A3A36; --accent: #9CC4B8; --accent-weak: #1A2B27; --caution: #FDBA74;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #141413; --surface: #1C1C1A; --ink: #ECECE8; --ink-2: #A3A29C;
+  --line: #2C2C29; --line-strong: #3A3A36; --accent: #9CC4B8; --accent-weak: #1A2B27; --caution: #FDBA74;
+}
+:root[data-theme="light"] { color-scheme: light; }
+@media (min-width: 600px) { :root { --gutter: 32px; } }
+
+/* 2. Base, Korean typography, links, focus ---------------------------- */
+*, ::before, ::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/28px var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p, ol, ul, dl, dd, figure, pre, table { margin: 0; padding: 0; }
+h1, h2, h3 { text-wrap: balance; }
+p, li, dd, td, th, caption { text-wrap: pretty; }
+strong { font-weight: 600; }
+time, .tnum { font-variant-numeric: tabular-nums; }
+.nobr { white-space: nowrap; } /* short compounds only, e.g. 일별·7일간 */
+[hidden] { display: none !important; }
+::selection { background: var(--accent-weak); color: var(--ink); }
+
+a {
+  color: var(--ink); text-decoration-line: underline; text-decoration-thickness: 1px;
+  text-decoration-color: var(--accent); text-underline-offset: .24em;
+}
+a:hover { text-decoration-thickness: 2px; }
+a[href^="mailto:"] { overflow-wrap: anywhere; } /* and put <wbr> before the @ */
+.wordmark, .tabs a, .toc a, .more-link, .button, .doc-link-title, .skip-link { text-decoration-line: none; }
+.toc a:hover, .more-link:hover { text-decoration-line: underline; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a:focus-visible { border-radius: 2px; }
+#main:focus { outline: none; }
+.vh, .skip-link:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media screen { .print-only { display: none !important; } }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  a, .button, .copy { transition: color .12s, background-color .12s, border-color .12s, text-decoration-color .12s; }
+}
+
+/* 3. Type roles (one place per size) ---------------------------------- */
+.label, .toc-label, .steps-group, .note-label, .doc-meta dt, .spec dt, .fields dt, .table caption,
+.table thead th, .email-template figcaption, .table--stack td[data-label]::before {
+  font-weight: 600; font-size: 13px; line-height: 20px; color: var(--ink-2);
+}
+.doc-meta, .spec dd, .fields dd, .table, .toc a, .email-template pre { font-size: 14px; line-height: 22px; }
+.doc-meta, .spec, .table, .steps { font-variant-numeric: tabular-nums; }
+.tabs a, .button, .more-link, .skip-link { font-weight: 600; font-size: 15px; line-height: 22px; }
+
+/* 4. Layout: one column; from 1024px a 184 rail + 64 gap + 680 grid ---- */
+.frame { max-width: calc(var(--measure) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+@media (min-width: 1024px) {
+  .frame {
+    max-width: calc(var(--rail) + var(--gap) + var(--measure) + 2 * var(--gutter));
+    display: grid; grid-template-columns: var(--rail) minmax(0, var(--measure)); column-gap: var(--gap);
+  }
+  .frame > * { grid-column: 2; }
+  .frame > .rail { grid-column: 1; }
+}
+
+/* 5. Skip link, header, tabs ------------------------------------------ */
+.skip-link {
+  position: absolute; z-index: 1; left: var(--gutter); top: 8px; display: inline-flex; align-items: center;
+  min-height: 44px; padding: 0 16px; border-radius: 4px; background: var(--ink); color: var(--paper);
+}
+.site-header { border-bottom: 1px solid var(--line); }
+.site-header .frame { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 24px; }
+.wordmark { display: flex; align-items: baseline; gap: 6px; padding-block: 14px; white-space: nowrap; }
+.wordmark-name { font-weight: 700; font-size: 16px; line-height: 20px; letter-spacing: -.02em; }
+.wordmark-sub { font-weight: 600; font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.tabs ul { display: flex; list-style: none; }
+.tabs a { position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 12px; color: var(--ink-2); }
+.tabs a:hover, .tabs a[aria-current="page"] { color: var(--ink); }
+.tabs a:focus-visible { outline-offset: -2px; }
+.tabs a[aria-current="page"]::after { content: ""; position: absolute; inset: auto 12px -1px; border-bottom: 2px solid var(--ink); } /* a border survives forced colors */
+@media (max-width: 599px) { /* tabs drop to a second row, 50:50 */
+  .tabs { flex: 1 0 100%; }
+  .tabs li { flex: 1; }
+  .tabs a { padding: 0 4px; }
+  .tabs a[aria-current="page"]::after { inset-inline: 0; }
+}
+@media (min-width: 600px) {
+  .wordmark { padding-block: 18px; }
+  .tabs a { min-height: 56px; }
+  .tabs ul { margin-right: -12px; }
+}
+@media (min-width: 1024px) {
+  .site-header .frame { display: grid; column-gap: var(--gap); }
+  .tabs ul { margin: 0 0 0 -12px; } /* first tab label lines up with the text column */
+}
+
+/* 6. Document head ------------------------------------------------------ */
+.doc { padding-top: 24px; }
+h1 { font-weight: 700; font-size: 24px; line-height: 32px; letter-spacing: -.02em; }
+.h1-product { display: block; margin-bottom: 4px; font-weight: 600; font-size: 14px; line-height: 20px; letter-spacing: 0; color: var(--ink-2); }
+.lede { margin-top: 12px; font-size: 18px; line-height: 30px; color: var(--ink-2); }
+.doc-meta { margin-top: 24px; padding-block: 12px; border-block: 1px solid var(--line); }
+.doc-meta > div { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 12px; align-items: baseline; }
+.doc-meta > div + div { margin-top: 4px; }
+@media (min-width: 768px) {
+  .doc { padding-top: 40px; }
+  h1 { font-size: 28px; line-height: 36px; }
+  .doc-meta { display: flex; flex-wrap: wrap; gap: 8px 40px; }
+  .doc-meta > div { display: block; }
+  .doc-meta > div + div { margin-top: 0; }
+}
+
+/* 7. Table of contents: numbered rows; sticky rail from 1024px -------- */
+.toc { margin-top: 32px; }
+@media (max-width: 1023px) { .toc--rail-only { display: none; } } /* short pages: rail only */
+.doc-lead { margin-top: 24px; } /* optional slot between .doc-head and .toc, e.g. the deletion request block */
+.toc-label { margin-bottom: 8px; }
+.toc ol { list-style: none; counter-reset: toc; border-top: 1px solid var(--line); }
+.toc li { counter-increment: toc; border-bottom: 1px solid var(--line); }
+.toc a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding-block: 8px; }
+.toc a::before { content: counter(toc); content: counter(toc) / ""; min-width: 16px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+@media (min-width: 1024px) {
+  .toc { grid-column: 1; grid-row: 1 / span 3; align-self: start; position: sticky; top: 40px; margin-top: 0; }
+  .toc ol { border: 0; border-left: 1px solid var(--line); }
+  .toc li { border: 0; }
+  .toc a {
+    align-items: baseline; gap: 8px; min-height: 0; margin-left: -1px; padding: 4px 0 4px 12px;
+    border-left: 2px solid transparent; font-size: 13px; line-height: 20px; color: var(--ink-2);
+  }
+  .toc a:hover, .toc a[aria-current="true"] { color: var(--ink); }
+  .toc a[aria-current="true"] { border-left-color: var(--ink); }
+}
+
+/* 8. Numbered sections and flow ------------------------------------------ */
+.doc-body { margin-top: 40px; counter-reset: sec; }
+.doc-body > * + :not(.doc-section) { margin-top: 40px; }
+.doc-section { scroll-margin-top: 24px; }
+.doc-section + .doc-section { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
+.doc-section h2 { font-weight: 700; font-size: 20px; line-height: 28px; letter-spacing: -.01em; }
+.doc-section h3 { font-weight: 700; font-size: 16px; line-height: 28px; }
+.doc-section:not(.doc-section--plain) { counter-increment: sec; }
+.doc-section:not(.doc-section--plain) > h2::before {
+  content: counter(sec); content: counter(sec) / ""; display: inline-block; min-width: 24px;
+  font-weight: 600; font-size: 16px; letter-spacing: 0; color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+.doc-section:target > h2 { margin-inline: -8px; padding-inline: 8px; border-radius: 2px; background: var(--accent-weak); }
+@media (min-width: 768px) { .doc-section + .doc-section { margin-top: 56px; } }
+@media (min-width: 1024px) { /* numbers hang in the gutter; heading text keeps the text edge */
+  .doc-section:not(.doc-section--plain) > h2::before { width: 32px; margin-left: -32px; padding-right: 12px; text-align: right; }
+  .doc-section:not(.doc-section--plain):target > h2 { margin-left: -40px; padding-left: 40px; }
+}
+.doc-section > * + * { margin-top: 16px; }
+.doc-section > h2 + * { margin-top: 12px; }
+.doc-section > * + :is(h3, .note, .spec, .table, .steps-group, .request, .email-template, .actions, .doc-links),
+.doc-section > :is(.note, .spec, .table, .steps, .request, .email-template, .actions, .doc-links) + * { margin-top: 24px; }
+.doc-section > .steps-group + .steps, .doc-section > .email-template + .actions { margin-top: 12px; }
+.prose-list { padding-left: 20px; }
+.prose-list > li + li { margin-top: 4px; }
+.prose-list > li::marker { color: var(--ink-3); }
+.commitment { font-weight: 600; }
+.caution { font-weight: 600; color: var(--caution); }
+.warning, .exception { padding-left: 16px; border-left: 2px solid var(--caution); }
+.exception { border-left-color: var(--line-strong); }
+.more-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+
+/* 9. Spec summary, note, tables ------------------------------------------ */
+.spec { border-top: 1px solid var(--line); }
+.spec > div, .fields > div {
+  display: grid; grid-template-columns: 104px minmax(0, 1fr); column-gap: 16px; align-items: baseline;
+  padding-block: 12px; border-bottom: 1px solid var(--line);
+}
+@media (min-width: 600px) { .spec > div { grid-template-columns: 144px minmax(0, 1fr); } }
+.note { padding: 16px; border: 1px solid var(--line); border-radius: 4px; }
+.note > * + * { margin-top: 8px; }
+@media (min-width: 600px) { .note { padding-inline: 20px; } }
+.table { width: 100%; border-collapse: collapse; }
+.table caption { caption-side: top; padding-bottom: 8px; text-align: left; }
+.table th, .table td { padding: 12px 16px 12px 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.table :is(th, td):last-child { padding-right: 0; }
+.table thead th { padding-block: 8px; border-bottom-color: var(--line-strong); }
+.table tbody th { font-weight: 600; }
+.history tbody th { width: 128px; white-space: nowrap; font-weight: 400; font-size: 13px; color: var(--ink-2); }
+@media (max-width: 599px) { /* .table--stack (3+ columns): rows become blocks, td[data-label] names its column */
+  .table--stack, .table--stack :is(caption, tbody, tr, th, td) { display: block; }
+  .table--stack thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .table--stack thead th { white-space: nowrap; } /* set on th: text-wrap: pretty resets inherited nowrap */
+  .table--stack tbody { border-top: 1px solid var(--line-strong); }
+  .table--stack tr { padding-block: 12px; border-bottom: 1px solid var(--line); }
+  .table--stack :is(th, td) { padding: 0; border: 0; }
+  .table--stack :is(th, td) + td { margin-top: 8px; }
+  .table--stack td[data-label]::before { content: attr(data-label); display: block; }
+}
+
+/* 10. Steps: two groups, 1px circle numbers -------------------------------- */
+.steps { list-style: none; counter-reset: step; border-top: 1px solid var(--line); }
+.steps[start="3"] { counter-reset: step 2; } /* add a rule like this for any other start value */
+.steps > li { position: relative; counter-increment: step; padding: 16px 0 16px 36px; border-bottom: 1px solid var(--line); }
+.steps > li::before { /* non-empty ::before also keeps list semantics in Safari */
+  content: counter(step); position: absolute; left: 0; top: 18px; width: 24px; height: 24px;
+  border: 1px solid var(--line-strong); border-radius: 50%;
+  font-weight: 600; font-size: 13px; line-height: 22px; text-align: center; color: var(--ink-2);
+}
+.steps .prose-list { margin-top: 8px; }
+
+/* 11. Request block, tokens, buttons, copy --------------------------------- */
+/* order: primary button, warning, fields, so the button sits in the 375x667 first screen */
+.request { padding: 16px; border: 1px solid var(--line); border-radius: 4px; }
+.request > * + * { margin-top: 16px; }
+.fields { border-top: 1px solid var(--line); }
+.fields > div { grid-template-columns: 1fr; row-gap: 4px; }
+.fields > div:last-child { padding-bottom: 0; border-bottom: 0; }
+@media (min-width: 600px) {
+  .request { padding: 24px; }
+  .fields > div { grid-template-columns: 112px minmax(0, 1fr); }
+}
+.token {
+  padding: 2px 6px; border: 1px solid var(--line-strong); border-radius: 4px; font-weight: 600;
+  overflow-wrap: anywhere; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.button {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px;
+  border: 1px solid var(--ink); border-radius: 4px; background: var(--ink); color: var(--paper);
+  font-family: inherit; text-align: center; cursor: pointer;
+}
+.button:hover { background: color-mix(in oklab, var(--ink) 84%, var(--paper)); }
+.button--secondary { border-color: var(--ink-3); background: transparent; color: var(--ink); }
+.button--secondary:hover { border-color: var(--ink); background: var(--surface); }
+@media (max-width: 599px) { .actions .button { flex: 1 1 100%; } }
+.copy {
+  position: relative; display: inline-flex; align-items: center; min-height: 32px; margin-left: 8px; padding: 0 8px;
+  border: 1px solid var(--ink-3); border-radius: 4px; background: transparent; color: var(--ink-2);
+  font: 600 13px/20px var(--font); cursor: pointer;
+}
+.copy::after { content: ""; position: absolute; inset: -6px 0; } /* 44px touch target */
+.copy:hover, .copy[data-done] { border-color: var(--ink); color: var(--ink); }
+:is(dd, p):has(> .copy:not([hidden])) { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+:is(dd, p):has(> .copy) > .copy { margin-left: 0; }
+
+/* 12. Email template (Pretendard, never mono) -------------------------------- */
+.email-template { border: 1px solid var(--line); border-radius: 4px; }
+.email-template figcaption { padding: 8px 16px; border-bottom: 1px solid var(--line); }
+.email-template pre { padding: 16px; font-family: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.email-template .key { color: var(--ink-2); }
+
+/* 13. Document list (index hub) ---------------------------------------------- */
+.doc-links { list-style: none; border-top: 1px solid var(--line); }
+.doc-links li {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: center;
+  min-height: 64px; padding-block: 16px; border-bottom: 1px solid var(--line);
+}
+.doc-link-title { font-weight: 600; }
+.doc-link-title::after { content: ""; position: absolute; inset: 0; } /* whole row is the target */
+.doc-link-desc, .doc-link-date { font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.doc-link-date { margin-top: 4px; }
+.doc-link-arrow { color: var(--ink-2); }
+.doc-links li:hover .doc-link-title { text-decoration-line: underline; text-decoration-thickness: 2px; }
+.doc-links li:hover .doc-link-arrow { color: var(--ink); }
+.doc-links li:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.doc-links li:has(:focus-visible) :focus-visible { outline: none; }
+
+/* 14. Footer ---------------------------------------------------------------- */
+.site-footer { margin-top: 80px; padding: 24px 0 40px; border-top: 1px solid var(--line); font-size: 13px; line-height: 20px; color: var(--ink-2); }
+.site-footer ul { display: flex; flex-wrap: wrap; list-style: none; }
+.site-footer li + li::before { content: "·"; content: "·" / ""; margin-inline: 8px; color: var(--ink-3); }
+.site-footer a { display: inline-block; padding-block: 2px; color: var(--ink-2); }
+.site-footer .footer-privacy { font-weight: 700; color: var(--ink); }
+.footer-name { margin-bottom: 8px; font-weight: 600; color: var(--ink); }
+.footer-body > * + * { margin-top: 4px; }
+
+/* 15. Print (A4) --------------------------------------------------------------- */
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --paper: #fff; --ink: #000; --ink-2: #444; --ink-3: #888; --line: #ccc; --line-strong: #999; --accent: #000; --accent-weak: #fff; --caution: #9A3412; }
+  body { font-size: 10.5pt; line-height: 1.6; }
+  .skip-link, .tabs, .toc, .copy, .actions, .doc-link-arrow, .site-footer nav, .to-top { display: none !important; }
+  .frame { display: block; max-width: none; padding: 0; }
+  .site-header, .doc-meta { border: 0; }
+  .wordmark { padding: 0 0 8pt; }
+  .doc { padding-top: 0; }
+  h1 { font-size: 18pt; line-height: 1.3; }
+  .lede { font-size: 11.5pt; line-height: 1.6; }
+  .doc-meta { display: block; }
+  .doc-meta > div { display: grid; }
+  .doc-section h2 { font-size: 13pt; line-height: 1.4; }
+  .doc-section h2::before { width: auto !important; margin: 0 !important; text-align: left !important; }
+  .doc-body, .doc-section + .doc-section { margin-top: 16pt; }
+  h2, h3, .label, .steps-group, .note-label, caption { break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  p:has(+ :is(ul, ol, table)) { break-after: avoid; }
+  tr, .spec > div, .fields > div, .steps > li, .note, .email-template { break-inside: avoid; }
+  .doc a[href]:not([href^="#"]):not([href^="mailto:"])::after { content: " (" attr(href) ")"; position: static; font-size: 9pt; font-weight: 400; color: var(--ink-2); }
+  .site-footer { margin-top: 24pt; padding: 8pt 0 0; }
+}
