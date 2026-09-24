@@ -1,19 +1,184 @@
-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>개인정보처리방침 · Assembly Stats Data</title><style>body{max-width:760px;margin:64px auto;padding:0 24px;font:17px/1.8 system-ui;color:#20242a}h1{font-size:30px}h2{font-size:21px;margin-top:32px}a{color:#2457ad}.draft{background:#fff5d6;padding:16px}</style><body>
-<p class="draft">Instagram 연동 자료는 아래 목적과 보관·삭제 기준에 따라 처리합니다.</p>
-<h1>Assembly Stats Data 개인정보처리방침</h1>
-<p>운영자: 반반웍스<br>문의: <a href="mailto:banbanworks.stuio@gmail.com">banbanworks.stuio@gmail.com</a><br>작성일: 2026년 9월 13일</p>
-<h2>처리 목적과 항목</h2>
-<p>이 앱은 국회 공식 자료에 연결된 Instagram 전문 계정의 공개 지표를 확인하기 위한 운영자용 데이터 연동 앱입니다. 계정 식별자, 사용자 이름, 공개 팔로워 수, 관측 시각과 공식 계정 확인 근거를 처리합니다. 이를 국회 의원 식별자와 연결해 자료의 정확성, 일별·7일간 팔로워 수 변화와 오류 정정을 확인합니다.</p>
-<p>게시물 본문·사진·댓글·메시지·팔로워 개인 목록은 수집하지 않습니다. 앱 이용자의 Instagram 비밀번호를 요청하거나 저장하지 않습니다. 인증 토큰은 운영자 장비의 접근 제한 파일에서 처리하며 화면·결과 로그에 표시하지 않습니다.</p>
-<h2>저장과 삭제</h2>
-<p>활성화 후 지표 관측 자료는 운영자 장비에서 관측 회차 시작 시각부터 30일을 보존 기준으로 보관합니다. 만료된 자료는 정리 작업에서 삭제하며 지표 DB의 별도 백업은 만들지 않습니다. 장비가 꺼져 있거나 정리 작업이 실패하면 물리적 삭제는 다음 정상 정리 시점까지 지연될 수 있습니다.</p>
-<p>계정 연결 근거는 해당 계정의 수집을 유지하는 동안만 보관합니다. 삭제 요청이나 처리 종료가 확인되면 수집 대상에서 제외하고 관련 관측 자료를 삭제합니다. 자료가 필요하지 않게 된 경우에도 삭제합니다. 삭제한 자료의 재수집을 막기 위한 최소한의 국회 의원 식별자와 처리 시각은 해당 수집 서비스 종료 때까지 별도로 보관하며, Instagram 계정 식별자·사용자 이름·팔로워 수는 이 차단 기록에 남기지 않습니다.</p>
-<h2>외부 서비스와 공개 범위</h2>
-<p>지표 조회에는 Meta의 공식 API를 사용하며 필요한 계정 식별 정보와 운영자 앱 인증 정보가 Meta에 전달됩니다. 수집한 지표는 현재 외부에 공개하거나 광고 타기팅, 데이터 판매, 이용자 행동 추적이나 정치 성향 추론에 사용하지 않습니다. 다른 용도로 공개·제공하려는 경우 처리방침과 필요한 조건을 먼저 확인하고 갱신합니다.</p>
-<h2>권리 행사와 연락</h2>
-<p>자료 확인·정정·처리 중단·삭제를 원하면 위 이메일로 계정 주소와 요청 내용을 보내 주세요. 비밀번호, 인증 토큰, 주민등록번호를 보내지 마세요. 운영자는 요청 대상과 필요한 범위의 권한을 확인한 뒤 처리 결과를 회신합니다. <a href="deletion.html">삭제 요청 안내</a>를 참고할 수 있습니다.</p>
-<p>문의 이메일과 내용은 요청 처리에 필요한 범위에서 Gmail을 통해 처리합니다. 처리 완료 후 30일 이내 관련 문의를 삭제하며 법령상 별도 보존 의무가 있는 경우 그 근거와 기간을 안내합니다.</p>
-<h2>변경 안내</h2><p>항목·목적·보관 방식이 바뀌면 이 페이지에 변경 내용과 적용일을 안내합니다. 이 방침은 일반 서비스 전체의 공개 운영 안내를 대체하지 않습니다.</p>
-</body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개인정보처리방침 · Assembly Stats Data</title>
+  <meta name="description" content="Assembly Stats Data가 어떤 Instagram 연동 데이터를 처리하고 얼마나 보관하는지, 삭제는 어떻게 요청하면 되는지 밝힙니다.">
+  <link rel="canonical" href="https://holyh2o.github.io/assembly-stats-data-policy/privacy.html">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Assembly Stats Data">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="Assembly Stats Data 개인정보처리방침">
+  <meta property="og:description" content="게시물 본문, 사진, 댓글, 메시지, 팔로워 목록은 수집하지 않습니다. 앱 이용자의 Instagram 비밀번호는 요청하지도 저장하지도 않습니다.">
+  <meta property="og:url" content="https://holyh2o.github.io/assembly-stats-data-policy/privacy.html">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/fonts/pretendard/pretendard.css">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+  <header class="site-header">
+    <div class="frame">
+      <a class="wordmark rail" href="./"><svg class="wordmark-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="4"/><path d="M5.69 22 6.64 19H11.51L12.46 22H16L11.26 8H6.89L2.14 22ZM7.43 16.49 9.02 11.46H9.14L10.72 16.49Z M25.99 12.16H29.16C29.12 9.57 27.05 7.81 23.82 7.81C20.65 7.81 18.35 9.55 18.37 12.14C18.37 14.25 19.84 15.44 22.25 16.01L23.72 16.35C25.27 16.7 25.99 17.13 26.01 17.94C25.99 18.83 25.15 19.45 23.76 19.45C22.25 19.45 21.25 18.75 21.17 17.4H18C18.06 20.61 20.32 22.19 23.8 22.19C27.28 22.19 29.33 20.59 29.35 17.94C29.33 15.7 27.77 14.36 25.08 13.76L23.86 13.47C22.6 13.2 21.75 12.78 21.77 11.91C21.79 11.11 22.47 10.53 23.8 10.53C25.15 10.53 25.91 11.13 25.99 12.16Z"/></svg><span class="wordmark-name">Assembly Stats</span> <span class="wordmark-sub">Data</span></a>
+      <nav class="tabs" aria-label="정책 문서">
+        <ul>
+          <li><a href="privacy.html" aria-current="page">개인정보처리방침</a></li>
+          <li><a href="deletion.html">데이터 삭제 요청</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
+  <main id="main" tabindex="-1">
+    <article class="doc frame" aria-labelledby="doc-title">
+      <header class="doc-head">
+        <h1 id="doc-title"><span class="h1-product">Assembly Stats Data</span> <span class="h1-title">개인정보처리방침</span></h1>
+        <p class="lede">Assembly Stats Data는 국회 공식 자료에 연결된 Instagram 프로페셔널 계정의 공개 지표를 확인하는 운영자용 데이터 연동 앱입니다. Instagram 연동 데이터는 아래에 적은 목적과 보관·삭제 기준에 따라 처리합니다.</p>
+        <dl class="doc-meta">
+          <div><dt>운영자</dt><dd>반반웍스</dd></div>
+          <div><dt>문의</dt><dd><a href="mailto:banbanworks.stuio@gmail.com?subject=Assembly%20Stats%20Data%20%EB%AC%B8%EC%9D%98">banbanworks.stuio<wbr>@gmail.com</a><button type="button" class="copy" data-copy="banbanworks.stuio@gmail.com" hidden>주소 복사</button></dd></div>
+          <div><dt>작성일</dt><dd><time datetime="2026-09-13">2026년 9월 13일</time></dd></div>
+          <div><dt>수정일</dt><dd><time datetime="2026-09-24">2026년 9월 24일</time></dd></div>
+          <div class="print-only"><dt>주소</dt><dd>https://holyh2o.github.io/assembly-stats-data-policy/privacy.html</dd></div>
+        </dl>
+      </header>
 
+      <nav class="toc" aria-labelledby="toc-label">
+        <p class="toc-label" id="toc-label">목차</p>
+        <ol>
+          <li><a href="#items">처리하는 정보</a></li>
+          <li><a href="#purpose">이용 목적</a></li>
+          <li><a href="#not-collected">수집하지 않는 정보</a></li>
+          <li><a href="#token">인증 토큰</a></li>
+          <li><a href="#external">Meta에 전달되는 정보</a></li>
+          <li><a href="#retention">보관 기간</a></li>
+          <li><a href="#deletion-cases">그 밖에 삭제하는 경우</a></li>
+          <li><a href="#retained">삭제한 뒤에도 남는 기록</a></li>
+          <li><a href="#rights">요청 방법</a></li>
+          <li><a href="#inquiries">보내 주신 문의 이메일</a></li>
+          <li><a href="#changes">방침 변경</a></li>
+        </ol>
+      </nav>
+
+      <div class="doc-body">
+        <section class="doc-section doc-section--plain" id="summary" aria-labelledby="summary-title">
+          <h2 id="summary-title">한눈에 보기</h2>
+          <ul class="prose-list">
+            <li>계정 식별자, 사용자 이름, 공개 팔로워 수, 조회 시각, 공식 계정인지 확인한 근거를 처리합니다.</li>
+            <li>게시물 본문, 사진, 댓글, 메시지, 팔로워 목록은 수집하지 않습니다. 앱 이용자의 Instagram 비밀번호는 요청하지도 저장하지도 않습니다.</li>
+            <li>지표 기록(공개 지표를 조회해 남긴 기록)은 <strong>30일</strong>을 기준으로 보관하고 따로 백업하지 않습니다.</li>
+            <li>수집한 지표는 현재 외부에 공개하지도, 광고 타기팅·데이터 판매·이용자 행동 추적·정치 성향 추론에 쓰지도 않습니다.</li>
+            <li>Instagram 연동 데이터의 확인, 정정, 처리 중단, 삭제는 <a href="mailto:banbanworks.stuio@gmail.com?subject=Assembly%20Stats%20Data%20%EB%AC%B8%EC%9D%98">banbanworks.stuio<wbr>@gmail.com</a>으로 요청할 수 있습니다. 삭제 절차는 <a href="deletion.html">Instagram 연동 데이터 삭제 요청</a> 페이지에 있습니다.</li>
+          </ul>
+        </section>
+        <section class="doc-section" id="items" aria-labelledby="items-title">
+          <h2 id="items-title">처리하는 정보</h2>
+          <p>다음 정보를 처리합니다.</p>
+          <ul class="prose-list">
+            <li>계정 식별자</li>
+            <li>사용자 이름</li>
+            <li>공개 팔로워 수</li>
+            <li>조회 시각</li>
+            <li>공식 계정인지 확인한 근거</li>
+          </ul>
+        </section>
+        <section class="doc-section" id="purpose" aria-labelledby="purpose-title">
+          <h2 id="purpose-title">이용 목적</h2>
+          <p>위 정보를 국회의원 식별자와 연결해 다음을 확인합니다.</p>
+          <ul class="prose-list">
+            <li>데이터의 정확성</li>
+            <li>팔로워 수의 일별 변화와 <span class="nobr">7일간</span> 변화</li>
+            <li>오류 정정</li>
+          </ul>
+          <p class="commitment">수집한 지표는 현재 외부에 공개하지도, 광고 타기팅·데이터 판매·이용자 행동 추적·정치 성향 추론에 쓰지도 않습니다.</p>
+          <p>지표를 다른 용도로 공개하거나 제공하기 전에는 이 방침과 필요한 조건부터 확인하고 갱신합니다.</p>
+        </section>
+        <section class="doc-section" id="not-collected" aria-labelledby="not-collected-title">
+          <h2 id="not-collected-title">수집하지 않는 정보</h2>
+          <p>게시물 본문, 사진, 댓글, 메시지, 팔로워 목록은 수집하지 않습니다.</p>
+          <p>앱 이용자의 Instagram 비밀번호는 요청하지도 저장하지도 않습니다.</p>
+        </section>
+        <section class="doc-section" id="token" aria-labelledby="token-title">
+          <h2 id="token-title">인증 토큰</h2>
+          <p>인증 토큰은 접근이 제한된 파일에 담아 반반웍스 장비에 두고 사용합니다. 화면이나 결과 로그에는 표시하지 않습니다.</p>
+        </section>
+        <section class="doc-section" id="external" aria-labelledby="external-title">
+          <h2 id="external-title">Meta에 전달되는 정보</h2>
+          <p>지표는 Meta의 공식 API로 조회하며, 이때 필요한 계정 식별 정보와 이 앱의 인증 정보가 Meta에 전달됩니다.</p>
+        </section>
+        <section class="doc-section" id="retention" aria-labelledby="retention-title">
+          <h2 id="retention-title">보관 기간</h2>
+          <h3 id="retention-metrics">지표 기록</h3>
+          <p>활성화 후에는 지표 기록을 반반웍스 장비에 보관합니다. 보관 기간은 <strong>30일</strong>을 기준으로 하고, 그 기록을 남긴 조회 작업이 시작된 시각부터 셉니다.</p>
+          <p>보관 기간이 지난 지표 기록은 정리 작업에서 삭제합니다. <strong>지표 기록을 담은 데이터베이스는 따로 백업하지 않습니다.</strong></p>
+          <div class="note" role="note">
+            <p>반반웍스 장비가 꺼져 있거나 정리 작업이 실패하면, 다음 정리 작업이 정상적으로 실행될 때까지 지표 기록이 실제로 삭제되지 않을 수 있습니다.</p>
+          </div>
+          <h3 id="retention-link">계정 연결 근거</h3>
+          <p>계정 연결 근거는 해당 계정을 계속 수집하는 동안만 보관합니다.</p>
+        </section>
+        <section class="doc-section" id="deletion-cases" aria-labelledby="deletion-cases-title">
+          <h2 id="deletion-cases-title">그 밖에 삭제하는 경우</h2>
+          <p>데이터 삭제 요청이나 처리 종료가 확인되면, 해당 계정을 수집 대상에서 제외하고 관련 지표 기록을 삭제합니다.</p>
+          <p>연동 데이터가 필요 없어졌을 때도 삭제합니다.</p>
+        </section>
+        <section class="doc-section" id="retained" aria-labelledby="retained-title">
+          <h2 id="retained-title">삭제한 뒤에도 남는 기록</h2>
+          <p class="exception">삭제한 데이터를 다시 수집하지 않도록 최소한의 기록을 해당 수집 서비스가 종료될 때까지 따로 보관합니다. 이 기록에는 국회의원 식별자와 처리 시각을 담고, Instagram 계정 식별자, 사용자 이름, 팔로워 수, 지표 기록은 담지 않습니다.</p>
+        </section>
+        <section class="doc-section" id="rights" aria-labelledby="rights-title">
+          <h2 id="rights-title">요청 방법</h2>
+          <p>연동 데이터의 확인, 정정, 처리 중단, 삭제를 원하시면 <a href="mailto:banbanworks.stuio@gmail.com?subject=Assembly%20Stats%20Data%20%EB%AC%B8%EC%9D%98">banbanworks.stuio<wbr>@gmail.com</a>으로 Instagram 계정 주소와 요청 내용을 적어 보내 주세요.</p>
+          <p class="warning"><strong class="caution">비밀번호, 인증 토큰, 주민등록번호는 보내지 마세요.</strong></p>
+          <p>반반웍스는 요청 대상과 필요한 범위의 권한을 확인한 뒤 처리 결과를 답장으로 알려 드립니다.</p>
+          <p>삭제를 요청하는 방법과 그 뒤에 반반웍스가 하는 일은 <a href="deletion.html">Instagram 연동 데이터 삭제 요청</a> 페이지에서 볼 수 있습니다.</p>
+        </section>
+        <section class="doc-section" id="inquiries" aria-labelledby="inquiries-title">
+          <h2 id="inquiries-title">보내 주신 문의 이메일</h2>
+          <p>문의 이메일과 그 내용은 요청을 처리하는 데 필요한 범위에서 Gmail로 다룹니다. 요청을 처리한 뒤 30일 이내에 관련 문의 이메일과 그 내용을 삭제합니다. 법령에 따라 따로 보존할 의무가 있으면 그 근거와 기간을 알려 드립니다.</p>
+        </section>
+        <section class="doc-section" id="changes" aria-labelledby="changes-title">
+          <h2 id="changes-title">방침 변경</h2>
+          <p>처리하는 정보, 이용 목적, 보관 방식이 달라지면 바뀐 내용과 적용일을 이 페이지에서 알려 드립니다.</p>
+          <p>이 방침은 일반 서비스 전체의 공개 운영 안내를 대신하지 않습니다.</p>
+          <table class="table history">
+            <caption>변경 이력</caption>
+            <thead><tr><th scope="col">날짜</th><th scope="col">내용</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><time datetime="2026-09-24">2026년 9월 24일</time></th><td>문장과 구성을 새로 정리했습니다. 처리하는 정보, 이용 목적, 보관 방식은 그대로입니다. <a href="versions/2026-09-13/privacy.html">이전 문서 보기</a></td></tr>
+              <tr><th scope="row"><time datetime="2026-09-13">2026년 9월 13일</time></th><td>처음 게시했습니다.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <p><a class="more-link" href="deletion.html">Instagram 연동 데이터 삭제 요청 <svg class="arrow" viewBox="0 0 235 171" aria-hidden="true"><path d="M126 171 212 86 126 0 108 18 163 73H30V99H163L108 153Z"/></svg></a></p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="frame">
+      <p class="footer-name rail">Assembly Stats Data</p>
+      <div class="footer-body">
+        <nav aria-label="정책 문서 바로가기">
+          <ul>
+            <li><a class="footer-privacy" href="privacy.html">개인정보처리방침</a></li>
+            <li><a href="deletion.html">데이터 삭제 요청</a></li>
+          </ul>
+        </nav>
+        <ul>
+          <li>운영자 반반웍스</li>
+          <li>문의 <a href="mailto:banbanworks.stuio@gmail.com?subject=Assembly%20Stats%20Data%20%EB%AC%B8%EC%9D%98">banbanworks.stuio<wbr>@gmail.com</a></li>
+        </ul>
+        <p class="to-top"><a href="#main">맨 위로</a></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
